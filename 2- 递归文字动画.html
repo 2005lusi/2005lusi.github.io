@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: antiquewhite;
+        }
+
+        h1 {
+            position: absolute;
+            top: 40%;
+            left: 40%;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 50px;
+        }
+
+        input {
+            position: absolute;
+            left: 45%;
+            top: 50%;
+            width: 200px;
+            height: 50px;
+            border-radius: 30px;
+            border: 5px double blueviolet;
+            font-size: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1></h1>
+    <input type="number" name="" id="" value="1" max="10" min="1">
+
+    <script>
+        // 获取元素
+        const h1 = document.querySelector('h1')
+        const input = document.querySelector('input')
+        // 创建一个str
+        // 创建数字从0开始
+        // speed：表示自定义的变量 开始速度
+        let str = '吃饭、睡觉、写代码....'
+        let num = 0
+        let Startspeed = 500 / input.value
+        // 
+        fn()
+        function fn() {
+            //str.变成数组开始的第一个0的数字写入h1里面 
+            h1.innerHTML = str.slice(0, num)//等号后面的赋值给等号前面的
+            num++
+            if (num >= str.length) {
+                num = ''
+            }
+            setTimeout(fn, Startspeed)
+        }
+
+        input.addEventListener('input', () => {
+            speed = speed / input.value + 80
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+       
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3925764_kdyga2405un.css">
+    <style>
+        .girl {
+            width: 600px;
+            height: 860px;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+            background-image: url("1.webp");
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        h1 {
+            width: 270px;
+            margin: 0 auto;
+        }
+
+        img {
+            width: 600px;
+        }
+
+        .iconfont {
+            position: absolute;
+            font-size: 200px;
+            color: brown;
+            opacity: .0;
+            /* transition: 1.2s; */
+        }
+
+        .active {
+            opacity: .5;
+            display: block;
+            font-size: 250px;
+            /* transition: ; */
+            transform: scale(1);
+        }
+
+        @keyframes big {
+            form {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(10);
+                opacity: 0;
+
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>双击点赞加爱心 ♥</h1>
+    <div class="girl">
+        <div class="box"></div>
+    </div>
+
+    <script>
+        // 
+        const girl = document.querySelector(".girl")
+        //获取到鼠标的坐标
+        //i的坐标= 鼠标点击的坐标 - age的视口坐标 - i的高度/2
+        let tiemr1
+        let tiemr2
+        girl.addEventListener("dblclick", function (ev) {
+            let i = document.createElement("i")
+            i.classList.add('iconfont')
+            i.classList.add("icon-aixin1")
+            // 先绑定
+            girl.appendChild(i)
+
+                i.style.left = ev.pageX - girl.offsetLeft - (i.offsetWidth / 2) + "px";
+                i.style.top = ev.pageY - girl.offsetTop - (i.offsetHeight / 2) + "px";
+                i.classList.add("active")
+
+
+
+            tiemr1 = setTimeout(function () {
+                i.remove()
+            }, 1000)
+        })
+    </script>
+</body>
+
+</html>

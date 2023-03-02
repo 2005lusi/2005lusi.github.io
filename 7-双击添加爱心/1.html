@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3925764_kdyga2405un.css">
+    <!-- https:// -->
+    <title>Document</title>
+    <style>
+        div {
+            margin: auto;
+            height: 1000px;
+            width: 800px;
+            background: url("1.webp");
+            background-size: cover;
+            /* background: 背景色、 背景图、重复性、位置/尺寸 固定性;no-repeat 0% 0% / cover */
+            border: 1px solid #000;
+        }
+
+        h1 {
+            margin: auto;
+            text-align: center;
+            font-size: 50px;
+            width: 270px;
+        }
+
+        i {
+            display: block;
+            z-index: 10;
+        }
+
+        .iconfont {
+            font-size: 50px;
+            /* background-color: red; */
+        }
+
+        /* .iconfont {
+            font-size: 133px;
+
+        } */
+
+        /* .icon-anxin{
+            display: block;
+            transform: scale(4);
+        } */
+    </style>
+</head>
+
+<body>
+    <h1>双击显示红心</h1>
+    <i class="iconfont icon-aixin1"></i>
+    <!-- <span class="iconfont icon-aixin"></span> -->
+    <div>
+
+    </div>
+    <!-- <img src="1.webp" alt=""> -->
+    <script>
+        // 需求分析：
+        // 1.双击图片，显示红心
+        // 2.红心跟随鼠标显示
+        // 3.红心使用特效显示
+        // 4.显示完毕在消失
+        // 技术分析： dbclick事件+在线图标+（显示红心元素、父元素）create Element（）+append Child
+        const div = document.querySelector('div')
+        // const i = document.querySelector('i')
+        // console.log(iconfont);
+        // 新的创建
+        // let i = document.createElement('i')
+        let tiemr1
+        let tiemr2
+
+        div.addEventListener('dblclick', (ev) => {
+            const aixin1 = document.createElement('i')
+            aixin1.classList.add('iconfont')
+            aixin1.classList.add('icon-aixin1')
+            console.log(aixin1);
+            div.appendChild(aixin1)
+            
+            tiemr1 = setTimeout(function () {
+                tiemr1 = setTimeout(function () {
+                    i.style.left = ev.pageX - age.offsetLeft - (i.offsetWidth / 2) + "px";
+                    i.style.top = ev.pageY - age.offsetTop - (i.offsetHeight / 2) + "px";
+                    i.classList.add("active")
+                }, 0)
+                tiemr1 = setTimeout(function () {
+                    i.remove()
+                }, 1000)
+            })
+        })
+
+    </script>
+</body>
+
+</html>

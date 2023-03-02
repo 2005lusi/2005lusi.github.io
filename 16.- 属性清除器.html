@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Verdana;
+        }
+
+        textarea {
+            display: inline-block;
+            vertical-align: top;
+            width: 400px;
+            height: 200px;
+            resize: none;
+            background-color: #fffad2;
+        }
+
+        button {
+            display: inline-block;
+            background-color: blue;
+            color: #fff;
+        }
+    </style>
+</head>
+<h1>属性清除器</h1>
+<textarea name="inputBox"></textarea>
+<button type="button">清除属性</button>
+<textarea name="outputBox"></textarea>
+</div>
+<script>
+    document.querySelector("textarea[name=inputBox]").value = "<div data-info=\"some data\" class=\"some-css-class another-class\">\n\t<div data-xyz='abc'>\n\t\t<span style='color:blue;font-size:11px;'></span>\n\t</div>\n</div>";
+    // 需求:1.清除所有属性
+    // 核心技术点：h1.remove Attribute（'id'）
+    // 获取h1的所有属性：h1.attr ibutes
+    // 获取ta1（textarea）：一组属性，数组的第一个
+    const ta1 = document.querySelectorAll('textarea')[0]
+    const ta2 = document.querySelectorAll('textarea')[1]
+    const arr = []//创建空数组
+    
+    const btn = document.querySelector('button')
+    btn.addEventListener('click', function () {
+        clearFn()
+    })
+
+    function clearFn() {
+        const div = document.createElement('div')// 创建一个div元素
+        div.innerHTML = ta1.value
+
+        const eleArr = div.querySelectorAll('*')//eleAll:数组元素集合
+        console.log(eleArr)
+
+        eleArr.forEach(ele => {//使用forEach
+            for (attr of ele.attributes) {
+                arr.push(attr.name)// 获取所有的属性名 。向控制台里面推，有了名字，就可以进行删除
+            }
+            // 使用数组删除所有的属性
+            arr.forEach(item => {
+                ele.removeAttribute(item)//在每一个元素属性身上删除
+            })
+        })
+        ta2.value = div.innerHTML
+    }
+    // console.log(div);
+</script>
+
+<body>
+
+</body>
+
+</html>

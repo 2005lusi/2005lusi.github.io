@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+    <style>
+        body {
+            background-color: beige;
+        }
+
+        p {
+            width: 290px;
+            height: 200px;
+            background-color: aquamarine;
+            justify-content: center;
+            font-size: 15px;
+            margin: auto;
+            border-radius: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <p>页面没有找到 5秒钟之后将会带您进入新浪首页!</p>
+
+    <script>
+        // 除掉一秒延迟
+        // 打开404 页面：内容：对不起，您访问的页面不存在，将在5秒之后跳
+        // location 小写的就等于window
+        const p = document.querySelector('p')
+        let num = 5
+        let timer = null
+        jump()
+        clearInterval(timer)
+        function jump() {
+            if (num === 0) {
+                window.location = 'http://www.sina.com.cn'
+                clearInterval(timer)
+            } else {
+                p.innerHTML = `页面没有找到${num}秒钟之后将会带您进入新浪首页！`
+                num--
+            }
+        }
+        timer = window.setInterval(jump, 1000)
+
+
+
+        // let timer
+        // let num = 4
+
+        // window.addEventListener('load', () => {
+        //     clearInterval(timer)
+        //     timer = setInterval(function () {
+        //         num--
+        //         p.inmerHTML = '页面没有找到' + num + "秒钟之后将会带您进入新浪首页"
+        //         if (num === 0) {
+        //             window.location = 'http://www.sina.com.cn'
+        //         }
+        //     }, 200)
+        // })
+
+
+    </script>
+</body>
+
+</html>

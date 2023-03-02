@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运动回调函数</title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            left: 50px;
+            top: 50px;
+            background-color: blue;
+            transition: .1s;
+            border: 5px double blanchedalmond;
+        }
+
+        button {
+            margin-left: 50px;
+        }
+    </style>
+    <script src="./myfn.js"></script>
+</head>
+
+<body>
+    <button>按钮</button>
+    <div></div>
+    <script>
+        // 1.核心目标：修改div的left的值（修改行间样式）
+
+        // 2.获取元素
+        const btn = document.querySelector('button')
+        const div = document.querySelector('div')
+
+        //3.创建变量
+        // timer:存储它当前的坐标
+        let timer
+
+        //目标距离
+        // let target = 500
+
+        // 步长
+        // let step = 10
+
+        // 4.注册事件处理函数
+        btn.addEventListener('click', function () {
+            //地狱回调
+            moveFn(div, 'left', 600, 10, 20, function () {
+                // alert('回调函数')
+                moveFn(div, 'top', 300, 10, 20, function () {
+                    moveFn(div, 'left', 50, 10, 20, function () {
+                        moveFn(div, 'top', 50, 10, 20, function () {
+
+                        })
+                    })
+                })
+            })
+
+            // 运动函数
+            function moveFn(el, attr, target, step, speed, callback) {//参数：元素、属性、目标、步长、毫秒数
+                // 三目运算
+                step = parseFloat(getStyle(el,attr)) < target ? step : -step
+                // 在创建定时器之前必须清除
+                clearInterval(timer)
+                timer = setInterval(()=>{
+                    let leftType = parseFloat(getStyle(el, attr))
+                    let attrValue =  leftType + step
+
+                    //条件
+                    // 当前目标点大于目标的时候 为负值 ||当前目标点小于目标的时候 为正值 
+                    if (attrValue > target && step > 0 || attrValue < target && step < 0) {
+                        attrValue = target
+                        clearInterval (timer)
+                    }
+                    el.style[attr] = attrValue + 'px'
+                    // 条件
+                    if (attrValue === target) {
+                        clearInterval(timer)
+                        callback && callback()
+                    }
+                },speed)
+
+
+            }
+        })
+    </script>
+</body>
+
+</html>
