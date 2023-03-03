@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+       * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #333;
+            transition: 3s;
+        }
+
+        .box {
+            position: absolute;
+            left: 48%;
+            top: 48%;
+            width: 100px;
+            height: 50px;
+            /* border: 5px double greenyellow; */
+            /* border: none; */
+            border-radius: 50px;
+            border: 3px solid black;
+            background-color: black;
+            transition: 2s;
+        }
+
+        button {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            background-color: #333;
+            transition: 2s;
+        }
+    </style>
+</head>
+</head>
+<body>
+    <div class="box">
+        <button></button>
+    </div>
+    <script>
+        //如果是黑色点击按钮变成白色
+        //如果是白色点击按钮变成黑色
+        const bodys = document.body
+        const btn = document.querySelector('button')
+        const div = document.querySelector('.box')
+
+        //创建一个开关
+        let on = true
+        //点击按钮发生变换
+        div.addEventListener('click', () => {
+            if (on) {
+                btn.style.left = '50px'
+                btn.style.backgroundColor = 'white'
+                div.style.backgroundColor = 'white'
+                bodys.style.backgroundColor = 'white'
+            } else {
+                btn.style.backgroundColor = '#333'
+                btn.style.left = '0px'
+                div.style.backgroundColor = 'black'
+                bodys.style.backgroundColor = '#333'
+            }
+            on = !on
+        })
+    </script>
+</body>
+
+</html>
