@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>懒加载</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 30px;
+        }
+
+        #app {
+            width: 600px;
+            display: flex;
+            border: 1px solid #000;
+            padding: 20px;
+        }
+
+        #app .items div {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .loader {
+            width: 46px;
+            height: 10px;
+            /* background-color: antiquewhite; */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 1;
+            margin: auto;
+        }
+
+        .loader.show {
+            opacity: 1;
+        }
+
+        .loader div {
+            width: 12px;
+            height: 24px;
+            background-color: #000;
+            animation: loader 1.2s infinite;
+        }
+
+        .loader div:nth-child(1) {
+            animation-delay: -0.24s;
+        }
+
+        .loader div:nth-child(2) {
+            animation-delay: -0.12s;
+        }
+
+        .loader div:nth-child(3) {
+            animation-delay: 0;
+        }
+
+        @keyframes loader {
+            0% {
+                height: 16px;
+            }
+
+            50%,
+            100% {
+                height: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <h1>语录</h1>
+            <div class="items">
+                <!-- <div class="item">
+                    <span>1.</span>
+                    <p>Talk is cheap,show me the code.</p>
+                    <address>linux</address>
+                </div> -->
+                <!-- <div>我是有底线的</div> -->
+            </div>
+            <div class="loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //1.获取元素
+        const box = document.querySelector('#app')
+        const items = document.querySelector('.items')
+        const loader = document.querySelector('.loader')
+
+
+        // 创建变量
+        let currentpage = 1//页码
+        let totalNum = 0 //总数量
+        let flag = true//控制
+
+        ////////////初始化/////////////////////////////
+        ////////////1.获取数据///////////////////////////
+        function fnGet(currentpage) {
+            const xhr = new XMLHttpRequest()
+            loader()
+            xhr.open('GET', `https://api.javascripttutorial.net/v1/quotes/?page=${currentpage}&limit=20`, true)
+            xhr.send()
+            xhr.onload = () => {//加载事件
+                if (xhr.status === 200) {//判断状态200后就转数据
+                    // 后端返回的字符串数据转化为JSON对象类型存进data
+                    const data = JSON.parse(xhr.response)
+                    console.log(data);
+                    render(data.data)
+                    totalNum = data.total//data的总数量
+                }
+            }
+        }
+        fnGet(currentpage)
+        //////////////////////////////////////////////////
+
+        ///////////////////2.渲染数据//////////////////////
+        // <div class="item">
+        //     <span>1</span>
+        //     <p>Like to fight for, get cherish, lost forget.Like to fight for, get cherish, lost forget.</p>
+        //     <address>liux</address>
+        // </div>
+
+        function render($data) {
+            for (item in $data) {
+                const div = document.createElement('div')
+                div.className = 'item'
+                div.innerHTML = `
+                <span>${$data[item]['id']}</span>
+                <p>${$data[item]['quote']}</p>
+                <address>${$data[item]['author']}</address>`
+                items.appendChild(div)
+                if (totalNum === $data[items].id) {
+                    const p = document.createElement('p')
+                    const hr = document.querySelector('hr')
+                    p.style.textAlign = 'center'
+                    p.innerHTML = '到达底线了o'
+                    box.appendChild(p)
+                    box.appendChild(hr)
+
+                }
+            }
+            flag = true
+            loader()
+        }
+
+        //////////////////////////////////////////////////////
+
+        /////////////////3.初始化////////////////////////////////
+        // 添加滚动事件，每次滚动添加20条数据；
+        // 当前页面不能加载为6时，终止加载，出现到达底部了o！
+        window.addEventListener('scroll', ev => {
+            // ES6 新增表达式语法；使用解结法来添加
+            ///////////////////////////滚动跳（文档）滚动到视口底部 加载下一组数据////////////////////////////
+            // 视口高度+滚动距离 >=文档高度
+            // console.log(1);
+            // console.log(currentpage < totalNum / 20)
+            const { scrollTop: a, clientHeight: b, scrollHeight: c } = document.documentElement
+            console.log(a + b > c - 5);
+            if (a + b > c - 5 && currentpage < totalNum / 20) {//小于5.几就等于5
+                if (!flag) return
+                flag = false
+                currentpage++
+                fnGet(currentpage)
+            }
+        })
+
+        function loader() {
+            loader.classList.remove('show')
+        }
+
+        function loader() {
+            loader.classList.add('show')
+        }
+    </script>
+</body>
+
+</html>

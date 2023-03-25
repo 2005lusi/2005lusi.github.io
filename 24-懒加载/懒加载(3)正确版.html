@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>懒加载</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 20px;
+        }
+        #app{
+            width: 600px;
+            display: flex;
+            border: 1px solid #000;
+            padding: 20px;
+        }
+        #app .items div{
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .loader{
+            width: 35px;
+            height: 10px;
+            /* background-color: antiquewhite; */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            margin: auto;
+        }
+        .show{
+            opacity: 1;
+        }
+        .loader div{
+            width: 10px;
+            height: 24px;
+            background-color: #000;
+            animation: loader 1.2s infinite;
+        }
+        .loader div:nth-child(1){
+            animation-delay: 0s;
+        }
+        .loader div:nth-child(2){
+            animation-delay: .12s;
+        }
+        .loader div:nth-child(3){
+            animation-delay: .24s;
+        }
+        @keyframes loader {
+            0%{
+                height: 24px;
+            }
+            50%,100%{
+                height: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="contarner">
+            <h1>语录</h1>
+
+            <div class="items">
+                <!-- <div class="item">
+                    <span>1</span>
+                    <p>Like to fight for, get cherish, lost forget.Like to fight for, get cherish, lost forget.</p>
+                    <address>liux</address>
+                </div> -->
+                <!-- <div>到底了o</div> -->
+            </div>
+            <div class="loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const itemsEl = document.querySelector('.items')
+        const loader = document.querySelector('.loader')
+        // const API = `https://api.javascripttutorial.net/v1/quotes/?page=${currentpage}&limit=${limit}`
+
+        // 变量
+        let currentpage = 1//页码
+        let all = 0//总数
+        let limit = 20//条目数
+        // let reached = false
+        let finis = true
+        ////////////初始化/////////////////////////////
+        ////////////1获取数据///////////////////////////
+        // 申请
+        function getItems(pa,limit){
+            showL()//添加动画
+            const API = `https://api.javascripttutorial.net/v1/quotes/?page=${pa}&limit=${limit}`
+            // 4发起请求 获得数据
+            const xhr = new XMLHttpRequest()//实例对象
+            xhr.open('GET',API,true)//准备请求
+            xhr.onload = ()=>{//加载事件
+                // xhr.status：http的状态
+                if(xhr.status === 200){//判断状态等于两百然后转数据
+
+                    // 后端返回的字符串数据转化为JSON对象类型存进itemData
+                    const itemData = JSON.parse(xhr.response)//解析我获取的JSON数据
+                    console.log(itemData);
+                    renderItems(itemData.data)//
+                    all = itemData.total//总数量itemData写进总数里
+                }
+            }
+            xhr.send()//发送请求
+        }
+        //////////////////////////////////////////////////
+
+        ///////////////////2渲染数据//////////////////////
+        // <div class="item">
+        //     <span>1</span>
+        //     <p>Like to fight for, get cherish, lost forget.Like to fight for, get cherish, lost forget.</p>
+        //     <address>liux</address>
+        // </div>
+
+        let str = ''//创建str空的字符串 
+        function renderItems(data){
+            data.forEach((item) => {
+                const div = document.createElement('div')
+                div.className = 'item'
+                div.innerHTML = `<span>${item.id}</span>
+                    <p>${item.quote}</p>
+                    <address>${item.author}</address>
+                    `
+                itemsEl.appendChild(div)
+                // if(item.id === all){
+                //     if(!finis) return// 第二次scroll会返回
+                //     finis = false// 表示下一组数据还没完成
+                //     // if(reached) return
+                //     // reached = true
+                //     const div = document.createElement('div')
+                //     div.innerHTML = '到底了哦'
+                //     itemsEl.appendChild(div)
+                // }
+            });
+            finis = true
+            hideL()//取消动画
+            if(currentpage === Math.ceil(all/limit)){
+            // if(currentpage >= Math.ceil(all/limit)){
+                // if(!finis) return// 第二次scroll会返回
+                // finis = false// 表示下一组数据还没完成
+                // if(reached) return
+                // reached = true
+                const div = document.createElement('div')
+                div.innerHTML = '到底了哦'
+                itemsEl.appendChild(div)
+            }
+        }
+        // 动画出现
+        function showL(){
+            loader.classList.add('show')
+        }
+        // 动画消失
+        function hideL(){
+            loader.classList.remove('show')
+        }
+        //////////////////////////////////////////////////////
+
+        /////////////////3初始化////////////////////////////////
+        getItems(currentpage,limit)//第一组十条已加载完成
+        /////////////////////////////////////////////////////
+
+        ///////////////////////////5滚动跳（文档）滚动到视口底部 加载下一组数据////////////////////////////
+        // 视口高度 + 滚动距离 >=文档高度
+        window.addEventListener('scroll',()=>{
+            // console.log(1);
+            // const a = window.innerHeight
+            // const b = window.scrollY
+            // const c = document.documentElement.scrollHeight - 5
+            // es6新增表达式语法：解构 + es6新增对象语法
+            // const {clientHeight,scrollTop,scrollHeight} = document.documentElement
+            const {clientHeight:a,scrollTop:b,scrollHeight:c} = document.documentElement
+            // console.log(a + b >= c);
+            
+            if(a + b >= c -5 && currentpage < Math.ceil(all/limit)){// 只加载六页
+                // console.log(1);
+                if(!finis) return//如果上一次加载还没完成就return 第二次scroll会返回
+                finis = false// 表示下一组数据还没完成
+                    currentpage++//每次添加 5+1
+                    getItems(currentpage,limit)//调用
+            }
+            
+        })
+    </script>
+</body>
+</html>

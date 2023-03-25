@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Tahoma;
+            color: #444;
+            letter-spacing: 1px;
+        }
+
+        h1,
+        h2 {
+            font-weight: normal;
+        }
+
+        #wrapper {
+            width: 90%;
+            max-width: 960px;
+            margin: 20px auto;
+            border-radius: 6px;
+            box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            padding: 0 0 20px;
+            overflow: hidden;
+            border: 1px solid lightgray;
+        }
+
+        #page-banner {
+            background: #eee;
+            padding: 10px 0;
+
+        }
+
+        #page-banner h1,
+        #page-banner p {
+            width: 100%;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        #page-banner input {
+            width: 90%;
+            max-width: 300px;
+            margin: 20px auto;
+            display: block;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #444;
+        }
+
+        #book-list,
+        #add-book,
+        #tabbed-content {
+            margin: 30px;
+        }
+
+        #book-list ul,
+        #tabbed-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #book-list li {
+            padding: 20px;
+            border-left: 5px solid #ddd;
+            margin: 20px 10px;
+        }
+
+        #book-list li:hover {
+            border-color: #9361bf;
+        }
+
+        .delete {
+            float: right;
+            background: #9361bf;
+            padding: 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .delete:hover {
+            background: #333;
+        }
+
+        #add-book {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        #add-book input {
+            display: block;
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            border-radius: 4px 0 0 4px;
+            box-sizing: border-box;
+            width: 300px;
+            float: left;
+            clear: both;
+        }
+
+        #add-book button {
+            border: 1px solid #9361bf;
+            background: #9361bf;
+            padding: 10px 20px;
+            font-size: 16px;
+            display: inline-block;
+            margin: 0;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            width: 100px;
+            float: left;
+            margin: 20px 0;
+            border-left: 0;
+            color: white;
+        }
+
+        #add-book:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        #add-book #hide {
+            width: 30px;
+        }
+
+        #add-book label {
+            line-height: 52px;
+        }
+
+        .ycqb {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <header>
+            <div id="page-banner">
+                <h1 class="title">书单管理器</h1>
+                <p>功能：添加、删除、查询、隐藏书单</p>
+                <form id="search-books">
+                    <input class="srgjz" type="text" placeholder="请输入书名关键字" /><strong></strong>
+                </form>
+            </div>
+        </header>
+        <div id="book-list">
+            <h2 class="title">阅读列表</h2>
+            <ul class="ul">
+                <li>
+                    <span class="name">水浒传</span>
+                    <span class="delete">删除</span>
+                </li>
+                <li>
+                    <span class="name">红楼梦</span>
+                    <span class="delete">删除</span>
+                </li>
+                <li>
+                    <span class="name">西游记</span>
+                    <span class="delete">删除</span>
+                </li>
+                <li>
+                    <span class="name">三国志</span>
+                    <span class="delete">删除</span>
+                </li>
+            </ul>
+        </div>
+        <form id="add-book">
+            <input class="ycBtn" type="checkbox" id="hide">
+            <label for="hide">隐藏全部</label>
+            <input class="srsm" type="text" placeholder="输入书名" />
+            <button>添加</button>
+        </form>
+    </div>
+    <script>
+        // onchange
+        const addTxT = document.querySelector('button')
+        const inputText = document.querySelector('.srsm')
+        const ul = document.querySelector('.ul')
+        const title = document.querySelector('#search-books').firstElementChild
+        const remBtn = document.querySelectorAll('.delete')
+        const ycqb = document.querySelector('.ycBtn')
+        const srgjz = document.querySelector('.srgjz')
+        // remBtn.forEach(x => {
+        //     x.onclick = function () {
+        //         x.parentElement.remove()
+        //     }
+        // })
+        ul.addEventListener('click', (ev) => {
+            if (ev.target.className === 'delete') {
+                const li = ev.target.parentElement
+                li.remove()
+            }
+        })
+        addTxT.addEventListener('click', (ev) => {
+            ev.preventDefault()
+            if (inputText.value !== '') {
+                let li = document.createElement('li')
+                let span1 = document.createElement('span')
+                let span2 = document.createElement('span')
+                span1.className = 'name'
+                span2.className = 'delete'
+                span1.innerHTML = inputText.value
+                span2.append('删除')
+                // span2.onclick = function () {
+                //     span2.parentElement.remove(span2)
+                // }
+                li.appendChild(span1)
+                li.appendChild(span2)
+                ul.appendChild(li)
+                inputText.value = ''
+            } else {
+                alert('请输入正确内容')
+            }
+        })
+
+        ycqb.addEventListener('click', function () {
+            const li = document.querySelectorAll('li')
+            li.forEach(x => {
+                x.classList.toggle('ycqb')
+            })
+        })
+
+        srgjz.addEventListener('keyup', function () {
+            srgjz.addEventListener('keydown', function (ev) {
+                if (ev.keycode === 13) {
+                    srgjz.value = ''
+                }
+            })
+            let flag1 = false
+            let smArr = document.querySelectorAll('.name')
+            smArr.forEach(x => {
+                x.parentElement.classList.add('ycqb')
+            })
+            smArr.forEach(x => {
+                let nmArr = x.innerHTML.split('')
+                let flag = nmArr.some(y => {
+                    let flag0 = srgjz.value.split('')
+                    return flag0.some(z => {
+                        return z === y
+                    })
+                })
+                if (flag) {
+                    x.parentElement.classList.remove('ycqb')
+                    flag1 = true
+                    if (ul.lastElementChild.className == 'meiyou') {
+                        ul.lastChild.remove()
+                    }
+                }
+                if (srgjz.value === '') {
+                    smArr.forEach(x => {
+                        x.parentElement.classList.remove('ycqb')
+                    })
+                    if (ul.lastElementChild.className == 'meiyou') {
+                        ul.lastChild.remove()
+                    }
+                }
+            })
+            if (!flag1) {
+                if (ul.lastElementChild.className == 'ycqb') {
+                    let li = document.createElement('li')
+                    li.className = 'meiyou'
+                    li.append('没有您需要的书哦！请输入其他的名字')
+                    ul.appendChild(li)
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>
